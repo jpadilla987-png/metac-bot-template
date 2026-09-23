@@ -46,9 +46,9 @@ dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
 
 
-class SummerTemplateBot2026(ForecastBot):
+class FallTemplateBot2026(ForecastBot):
     """
-    This is the template bot for Summer 2026 Metaculus AI Tournament.
+    This is the template bot for the Fall 2026 FutureEval Bot Tournament.
     This is a copy of what is used by Metaculus to run the Metac Bots in our benchmark, provided as a template for new bot makers.
     This template is given as-is, and is use-at-your-own-risk.
     We have covered most test cases in forecasting-tools it may be worth double checking key components locally.
@@ -688,7 +688,7 @@ if __name__ == "__main__":
         else None
     )
 
-    template_bot = SummerTemplateBot2026(
+    template_bot = FallTemplateBot2026(
         research_reports_per_question=1,
         predictions_per_research_report=1 if bootstrap_free else 5,
         use_research_summary_to_forecast=False,
@@ -698,12 +698,14 @@ if __name__ == "__main__":
         extra_metadata_in_explanation=True,
         llms=bootstrap_llms,
     )
+    if bootstrap_free:
+        template_bot._structure_output_validation_samples = 1
 
     # Per-mode tournament URL shown in the summary banner footer. These
     # piggyback on the forecasting_tools SDK constants and need updating
     # whenever those rotate seasons.
     TOURNAMENT_URLS = {
-        "tournament": "https://www.metaculus.com/tournament/summer-futureeval-2026/",
+        "tournament": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
         "metaculus_cup": "https://www.metaculus.com/tournament/metaculus-cup-summer-2025/",
         "test_questions": "https://www.metaculus.com/tournament/bot-testing-area/",
     }
@@ -735,15 +737,22 @@ if __name__ == "__main__":
             )
         )
     elif run_mode == "test_questions":
-        # The bot-testing-area tournament contains all question types and is
-        # the recommended target for smoke-testing your bot.
-        # https://www.metaculus.com/tournament/bot-testing-area/
         template_bot.skip_previously_forecasted_questions = False
-        forecast_reports = asyncio.run(
-            template_bot.forecast_on_tournament(
-                "bot-testing-area", return_exceptions=True
+        if bootstrap_free:
+            # One binary question is enough to verify credentials, generation,
+            # parsing, and Metaculus publishing without hammering free endpoints.
+            question = client.get_question_by_url(
+                "https://www.metaculus.com/questions/43327/"
             )
-        )
+            forecast_reports = asyncio.run(
+                template_bot.forecast_questions([question], return_exceptions=True)
+            )
+        else:
+            forecast_reports = asyncio.run(
+                template_bot.forecast_on_tournament(
+                    "bot-testing-area", return_exceptions=True
+                )
+            )
 
     template_bot.log_report_summary(forecast_reports)
     print_run_summary_banner(
