@@ -675,14 +675,14 @@ if __name__ == "__main__":
     bootstrap_llms = (
         {
             "default": GeneralLlm(
-                model="openrouter/free",
+                model="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
                 temperature=0.2,
                 timeout=90,
                 allowed_tries=2,
             ),
-            "summarizer": "openrouter/free",
-            "researcher": "openrouter/free",
-            "parser": "openrouter/free",
+            "summarizer": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+            "researcher": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+            "parser": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
         }
         if bootstrap_free
         else None
