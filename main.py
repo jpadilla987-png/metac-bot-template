@@ -92,7 +92,7 @@ class FallTemplateBot2026(ForecastBot):
                 model="openrouter/openai/gpt-4o", # "anthropic/claude-sonnet-4-20250514", etc (see docs for litellm)
                 temperature=0.3,
                 timeout=40,
-                allowed_tries=2,
+                allowed_tries=4,
             ),
             "summarizer": "openai/gpt-4o-mini",
             "researcher": "asknews/news-summaries",
@@ -675,14 +675,14 @@ if __name__ == "__main__":
     bootstrap_llms = (
         {
             "default": GeneralLlm(
-                model="openrouter/qwen/qwen3.8-27b:free",
+                model="openrouter/openrouter/free",
                 temperature=0.2,
-                timeout=90,
+                timeout=75,
                 allowed_tries=2,
             ),
-            "summarizer": "openrouter/qwen/qwen3.8-27b:free",
+            "summarizer": "openrouter/openrouter/free",
             "researcher": "no_research",
-            "parser": "openrouter/qwen/qwen3.8-27b:free",
+            "parser": "openrouter/openrouter/free",
         }
         if bootstrap_free
         else None
