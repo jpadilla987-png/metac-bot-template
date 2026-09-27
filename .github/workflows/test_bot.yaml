@@ -3,9 +3,6 @@ name: Test Bot
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-  push:
     branches: [main]
     paths:
       - "main.py"
