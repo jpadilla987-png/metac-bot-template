@@ -12,7 +12,16 @@ class PolicyGuardTests(unittest.TestCase):
         self.assertFalse(gate({}))
         self.assertFalse(gate({"ALLOW_METACULUS_POSTS": "false"}))
         self.assertFalse(gate({"ALLOW_METACULUS_POSTS": "1"}))
-        self.assertTrue(gate({"ALLOW_METACULUS_POSTS": "true"}))
+        self.assertFalse(gate({"ALLOW_METACULUS_POSTS": "true"}))
+        self.assertFalse(gate({"NIGHTEYE_RESEARCH_READY": "true"}))
+        self.assertTrue(
+            gate(
+                {
+                    "ALLOW_METACULUS_POSTS": "true",
+                    "NIGHTEYE_RESEARCH_READY": "true",
+                }
+            )
+        )
 
     def test_blocks_election_forecast(self):
         self.assertTrue(is_blocked_forecast_topic("Who will win the presidential election?"))
