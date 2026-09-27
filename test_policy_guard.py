@@ -1,10 +1,19 @@
 import unittest
 from types import SimpleNamespace
 
+import policy_guard
 from policy_guard import is_blocked_forecast_topic, should_block_question
 
 
 class PolicyGuardTests(unittest.TestCase):
+    def test_publish_gate_defaults_closed_and_requires_exact_true(self):
+        gate = getattr(policy_guard, "allow_metaculus_posts", lambda env: True)
+
+        self.assertFalse(gate({}))
+        self.assertFalse(gate({"ALLOW_METACULUS_POSTS": "false"}))
+        self.assertFalse(gate({"ALLOW_METACULUS_POSTS": "1"}))
+        self.assertTrue(gate({"ALLOW_METACULUS_POSTS": "true"}))
+
     def test_blocks_election_forecast(self):
         self.assertTrue(is_blocked_forecast_topic("Who will win the presidential election?"))
 
