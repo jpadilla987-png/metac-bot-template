@@ -46,8 +46,16 @@ _BLOCK_RE = re.compile("|".join(_BLOCK_PATTERNS), flags=re.IGNORECASE)
 
 
 def allow_metaculus_posts(env: Mapping[str, str]) -> bool:
-    """Fail closed unless the protected publish gate is explicitly enabled."""
-    return env.get("ALLOW_METACULUS_POSTS") == "true"
+    """Fail closed unless publishing and research-readiness are both explicit.
+
+    The zero-cost bootstrap currently uses no live research source. It is valid
+    for plumbing tests, but it must not become a live publishing path just
+    because one authorization variable was set.
+    """
+    return (
+        env.get("ALLOW_METACULUS_POSTS") == "true"
+        and env.get("NIGHTEYE_RESEARCH_READY") == "true"
+    )
 
 
 def is_blocked_forecast_topic(text: str) -> bool:
