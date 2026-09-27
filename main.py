@@ -671,6 +671,7 @@ if __name__ == "__main__":
     # Configure the bot. The `llms=` block below is commented out to use
     # whichever default models forecasting-tools picks based on your env vars;
     # uncomment and edit to pin specific models.
+    # Controlled smoke-test trigger: 2026-09-27 — validates current free-router path before Fall 2026 start.
     bootstrap_free = os.getenv("NIGHTEYE_BOOTSTRAP_FREE") == "1"
     bootstrap_llms = (
         {
