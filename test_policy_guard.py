@@ -17,6 +17,35 @@ class PolicyGuardTests(unittest.TestCase):
         )
         self.assertTrue(should_block_question(q))
 
+    def test_blocks_eu_exit_question_that_triggered_smoke_run(self):
+        q = SimpleNamespace(
+            question_text=(
+                "Will any of Belgium, France, Italy, Luxembourg, Netherlands, "
+                "and/or Germany leave the EU before 2027?"
+            ),
+            background_info="",
+            resolution_criteria="Resolves on formal withdrawal from the European Union.",
+            fine_print="",
+        )
+        self.assertTrue(should_block_question(q))
+
+    def test_blocks_policy_and_government_question(self):
+        self.assertTrue(
+            is_blocked_forecast_topic(
+                "Will the government pass the proposed legislation this year?"
+            )
+        )
+
+    def test_blocks_metadata_category_even_if_title_is_neutral(self):
+        q = SimpleNamespace(
+            question_text="Will event X happen by December?",
+            background_info="",
+            resolution_criteria="",
+            fine_print="",
+            category="Geopolitics",
+        )
+        self.assertTrue(should_block_question(q))
+
     def test_allows_nonpolitical_science_question(self):
         q = SimpleNamespace(
             question_text="Will a reusable launch vehicle reach orbit by 2027?",
