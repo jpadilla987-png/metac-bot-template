@@ -2,11 +2,9 @@ name: Forecast on new AI tournament questions
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/20 * * * *"
 
-# Zero-spend schedule enabled after the 2026-09-27 smoke test successfully
-# posted a real forecast using the OpenRouter free router.
+# Manual-only until protected account/Terms/token gates are verified and a
+# smoke test has a confirmed Metaculus forecast receipt.
 
 concurrency:
   group: ${{ github.workflow }}
