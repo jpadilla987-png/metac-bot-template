@@ -763,7 +763,7 @@ if __name__ == "__main__":
             # One binary question is enough to verify credentials, generation,
             # parsing, and Metaculus publishing without hammering free endpoints.
             question = client.get_question_by_url(
-                "https://www.metaculus.com/questions/43327/"
+                "https://www.metaculus.com/questions/45423/"
             )
             forecast_reports = asyncio.run(
                 template_bot.forecast_questions([question], return_exceptions=True)
