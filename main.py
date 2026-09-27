@@ -676,14 +676,14 @@ if __name__ == "__main__":
     bootstrap_llms = (
         {
             "default": GeneralLlm(
-                model="openrouter/openrouter/free",
+                model="openrouter/google/gemma-4-26b-a4b-it:free",
                 temperature=0.2,
                 timeout=75,
                 allowed_tries=2,
             ),
-            "summarizer": "openrouter/openrouter/free",
+            "summarizer": "openrouter/google/gemma-4-26b-a4b-it:free",
             "researcher": "no_research",
-            "parser": "openrouter/openrouter/free",
+            "parser": "openrouter/google/gemma-4-26b-a4b-it:free",
         }
         if bootstrap_free
         else None
