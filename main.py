@@ -8,6 +8,8 @@ from typing import Literal
 import dotenv
 
 # Runtime helpers (env validation, banners, dependency-warning suppression).
+from policy_guard import should_block_question
+
 from bot_helpers import (
     check_environment,
     print_run_summary_banner,
@@ -129,6 +131,24 @@ class FallTemplateBot2026(ForecastBot):
     )
     _concurrency_limiter = asyncio.Semaphore(_max_concurrent_questions)
     _structure_output_validation_samples = 2
+
+    # Political/election safeguard: this bot must not generate or publish forecasts
+    # on political/electoral questions. Filter before any model call or Metaculus publish.
+    async def forecast_questions(self, questions, return_exceptions=False):
+        allowed = []
+        blocked = []
+        for question in questions:
+            if should_block_question(question):
+                blocked.append(question)
+            else:
+                allowed.append(question)
+        if blocked:
+            logger.warning(
+                "Political/election safeguard skipped %s question(s): %s",
+                len(blocked),
+                [getattr(q, "page_url", getattr(q, "question_text", "unknown")) for q in blocked],
+            )
+        return await super().forecast_questions(allowed, return_exceptions)
 
     ##################################### RESEARCH #####################################
 
