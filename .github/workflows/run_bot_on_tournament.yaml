@@ -2,8 +2,11 @@ name: Forecast on new AI tournament questions
 
 on:
   workflow_dispatch:
-  # Scheduled runs stay disabled until the free-router smoke test is stable.
-  # This prevents accidental paid-model use after Metaculus denied LLM credits.
+  schedule:
+    - cron: "*/20 * * * *"
+
+# Zero-spend schedule enabled after the 2026-09-27 smoke test successfully
+# posted a real forecast using the OpenRouter free router.
 
 concurrency:
   group: ${{ github.workflow }}
