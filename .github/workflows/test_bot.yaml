@@ -2,6 +2,10 @@ name: Test Bot
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "main.py"
 
 # Add concurrency group to prevent parallel runs
 concurrency:
