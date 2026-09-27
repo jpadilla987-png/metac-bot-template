@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from typing import Any
 
 # Deliberately conservative. False positives are acceptable because this bot must
@@ -42,6 +43,11 @@ _BLOCK_PATTERNS = [
     r"\b(leave|exit|withdraw from|join|rejoin)\s+(the\s+)?(eu|european union|nato|united nations)\b",
 ]
 _BLOCK_RE = re.compile("|".join(_BLOCK_PATTERNS), flags=re.IGNORECASE)
+
+
+def allow_metaculus_posts(env: Mapping[str, str]) -> bool:
+    """Fail closed unless the protected publish gate is explicitly enabled."""
+    return env.get("ALLOW_METACULUS_POSTS") == "true"
 
 
 def is_blocked_forecast_topic(text: str) -> bool:
