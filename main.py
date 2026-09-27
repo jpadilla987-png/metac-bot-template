@@ -8,7 +8,7 @@ from typing import Literal
 import dotenv
 
 # Runtime helpers (env validation, banners, dependency-warning suppression).
-from policy_guard import should_block_question
+from policy_guard import allow_metaculus_posts, should_block_question
 
 from bot_helpers import (
     check_environment,
@@ -685,7 +685,7 @@ if __name__ == "__main__":
     run_mode: Literal["tournament", "metaculus_cup", "test_questions"] = args.mode
 
     check_environment(strict=True)
-    publish_to_metaculus = True
+    publish_to_metaculus = allow_metaculus_posts(os.environ)
     print_startup_banner(run_mode, will_publish=publish_to_metaculus)
 
     # Configure the bot. The `llms=` block below is commented out to use
