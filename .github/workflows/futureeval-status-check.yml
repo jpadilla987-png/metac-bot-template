@@ -63,4 +63,17 @@ jobs:
                   if any(x in h for x in ("forms.gle","docs.google.com/forms","airtable","tally.so","coda.io","typeform","form")):
                       candidates.add(href)
           print("FORM_LINK_CANDIDATES", json.dumps(sorted(candidates)))
+          form_url="https://forms.gle/aQdYMq9Pisrf1v7d8"
+          try:
+              fstatus, fhtml = get(form_url)
+              print("FORM_HTTP", fstatus)
+              print("FORM_FINAL_BYTES", len(fhtml))
+              clean=html.unescape(re.sub(r"<[^>]+>"," ",fhtml))
+              clean=re.sub(r"\\s+"," ",clean)
+              for needle in ("llm credit","credit","required","bot","name","email","organization","affiliation","motivation"):
+                  idx=clean.lower().find(needle)
+                  if idx >= 0:
+                      print("FORM_TEXT", needle, clean[max(0,idx-300):idx+900])
+          except Exception as e:
+              print("FORM_FETCH_ERROR", type(e).__name__, str(e)[:500])
           PY
